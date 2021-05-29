@@ -3,63 +3,117 @@
 #ifndef INCLUDE_WHUODHS_CROSSSECvoidION_H_
 #define INCLUDE_WHUODHS_CROSSSECvoidION_H_
 
+#include <cmath>
 namespace whuodhs
 {
+    template <typename T>
     class CrossSection
     {
     public:
-        CrossSection();
+        CrossSection()
+        {
+            zs_ = 0.0;
+            zb_ = 0.0;
+            A_ = 0.0;
+            h_ = 0.0;
+        }
 
-        CrossSection(const double &Zs, const double &Q);
+        // CrossSection(const T & zs, const T & zb, const T & Q, const T & n, const T & lx, const T & ly, const T & rx, const T &ry);
+
+        CrossSection(const T & zs, const T & zb)
+        {
+            zs_ = zs;
+            zb_ = zb;
+            A_ = 0.0;
+            depth();
+        }
 
         virtual ~CrossSection();
 
-        virtual void update();
+        virtual void area();
+
+        // virtual void width();
+
+        // virtual void wetPerimeter();
+
+        // virtual void hydraulicRadius();
+
+        // virtual void flowModulus();
+
+        void depth()
+        {
+            h_ = zs_ - zb_;
+        }
+
+        virtual void print() const;
+
+
+        // void velocity()
+        // {
+        //     v_ = Q_ / A_;
+        // }
+
+        // void length()
+        // {
+        //     l_ = std::hypot(rx_ - lx_, ry_ - ly_);
+        // }
+
+        // void angle()
+        // {
+        //     alpha_ = std::atan(ry_ - ly_, rx_ - lx_);
+        // }
+
+        // virtual void update(const T &zs, const double &Q);
 
     protected:
-        // _A: area
-        double _A;
+        // A_: area
+        T A_;
 
-        // _B: surface width
-        double _B;
+        // // B_: surface width
+        // T B_;
 
-        // _P: wet perimeter
-        double _P;
+        // // P_: wet perimeter
+        // T P_;
 
-        // _R: hydraulic radius
-        double _R;
+        // // R_: hydraulic radius
+        // T R_;
 
-        // _n: roughness coefficient, manning coefficient
-        double _n;
+        // // n_: roughness coefficient, manning coefficient
+        // T n_;
 
-        // _K: flow modulus
-        double _K;
+        // // K_: flow modulus
+        // T K_;
 
-        // _Zs: water suface level
-        double _Zs;
+        // zs_: water suface level
+        T zs_;
 
-        // _Zb: bed level
-        double _Zb;
+        // zb_: bed level
+        T zb_;
 
-        // _h: water depth
-        double _h;
+        // h_: water depth
+        T h_;
 
-        // _Q: flow discharge
-        double _Q;
+        // // Q_: flow discharge
+        // T Q_;
 
-        // _v: average velocity
-        double _v;
+        // // v_: average velocity
+        // T v_;
 
-        // _lCoord: cooridnate of the start point of the cross section
-        double _lx;
-        double _ly;
+        // // lx_, ly_: coordinate of the start point of the cross section
+        // T lx_;
+        // T ly_;
 
-        // _rCoord: cooridnate of the end point of the cross section
-        double _rx;
-        double _ry;
+        // // rx_, ry_: coordinate of the end point of the cross section
+        // T rx_;
+        // T ry_;
 
-        // _L: length of the cross section
-        double _L;
+        // // dx_, dy_: coordinate of the deepest point of the cross section
+
+        // // l_: length of the cross section
+        // T l_;
+
+        // // alpha_: angle of the cross section
+        // T alpha_;
     };
 }
 
