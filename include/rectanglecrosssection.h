@@ -13,19 +13,18 @@ namespace Whuodhs
     class RectangleCrossSection : public CrossSection<T>
     {
   public:
+    RectangleCrossSection(const RectangleCrossSection<T> & rcs, 
+                          const T & mx = 0.0,
+                          const T & my = 0.0,
+                          const T & rang = 0.0,
+                          const T & zb = 0.0,
+                          const T & zs = 0.0);
     RectangleCrossSection(const T &zs, const T & zb, const T & H,
                           const T & Q, const T & n, const T &b,
                           const T & lx, const T & ly, const T & rx, const T & ry);
     ~RectangleCrossSection() {};
     virtual void print() const override final;
     virtual void update(const T & zs, const T & Q) override final;
-
-    // void update(const T & zs, const T & Q) override final
-    // {
-    //   _A = area(Zs);
-
-    // }
-
   private:
     virtual T area() override final;
     virtual T width() override final;
@@ -63,6 +62,37 @@ namespace Whuodhs
     T RectangleCrossSection<T>::flowModulus()
       {
         return (this->A_ * std::pow(this->R_, (2.0/3.0)) / this->n_);
+      }
+
+  template <typename T>
+    RectangleCrossSection<T>::RectangleCrossSection(const RectangleCrossSection<T> & rcs,
+                                                    const T & mx,
+                                                    const T & my,
+                                                    const T & rang,
+                                                    const T & zb,
+                                                    const T & zs)
+      {
+        this->zb_ = rcs.zb_;
+        this->zs_ = rcs.zs_;
+        this->b_ = rcs.b_;
+        this->Q_ = rcs.Q_;
+        this->mag_ = rcs.mag_;
+        this->ang_ = rcs.ang_;
+        this->lx_ = rcs.lx_;
+        this->ly_ = rcs.ly_;
+        this->rx_ = rcs.rx_;
+        this->ry_ = rcs.ry_;
+        this->dx_ = rcs.dx_;
+        this->dy_ = rcs.dy_;
+
+        //this->zb_ = zb;
+
+        this->A_ = area();
+        this->B_ = width();
+        this->P_ = wetPerimeter();
+        this->R_ = hydraulicRadius();
+        this->K_ = flowModulus();
+        this->v_ = this->Q_ / this->A_;
       }
 
   template <typename T>
