@@ -4,6 +4,7 @@
 #define INCLUDE_WHUODHS_CROSSSECION_H_
 
 #include <cmath>
+#include "coordinate.h"
 
 namespace Whuodhs
 {
@@ -13,40 +14,20 @@ namespace Whuodhs
     public:
       CrossSection();
       CrossSection(const T & zs, const T & zb, const T & H, const T & Q, const T & n, 
-                                  const T & lx, const T & ly, const T &rx, const T & ry);
+                                  const Coord2<T> & lp, const Coord2<T> & rp, const Coord2<T> & dp = Coord2<T>(0.0, 0.0));
       virtual ~CrossSection() {};
       //virtual void flowModulus() = 0;
       virtual void print() const = 0;
       virtual void update(const T & zs, const T & Q) = 0;
-
-
-      // void velocity()
-      // {
-      //     v_ = Q_ / A_;
-      // }
-
-      // void length()
-      // {
-      //     l_ = std::hypot(rx_ - lx_, ry_ - ly_);
-      // }
-
-      // void angle()
-      // {
-      //     alpha_ = std::atan(ry_ - ly_, rx_ - lx_);
-      // }
-
-      // virtual void update(const T &zs, const T &Q);
-
     protected:
       virtual T area() = 0;
       virtual T width() = 0;
       virtual T wetPerimeter() = 0;
-      virtual T hydraulicRadius() = 0;
+      virtual T hydraulicRadius() = 0;  
       virtual T flowModulus() = 0;
-
       // A_: area
       T A_;
-      // B_: surface width
+      // B_: water width
       T B_;
       // P_: wet perimeter
       T P_;
@@ -69,14 +50,11 @@ namespace Whuodhs
       // v_: average velocity
       T v_;
       // lx_, ly_: coordinate of the start point of the cross section
-      T lx_;
-      T ly_;
+      Coord2<T> lp_;
       // rx_, ry_: coordinate of the end point of the cross section
-      T rx_;
-      T ry_;
+      Coord2<T> rp_;
       // dx_, dy_: coordinate of the deepest point of the cross section
-      T dx_;
-      T dy_;
+      Coord2<T> dp_;
       // l_: length of the cross section
       T mag_;
       // alpha_: angle of the cross section
@@ -99,19 +77,16 @@ namespace Whuodhs
         h_ = 0.0;
         Q_ = 0.0;
         v_ = 0.0;
-        lx_ = 0.0;
-        ly_ = 0.0;
-        rx_ = 0.0;
-        ry_ = 0.0;
-        dx_ = 0.0;
-        dy_ = 0.0;
+        lp_ = Coord2<T>(0.0, 0.0);
+        rp_ = Coord2<T>(0.0, 0.0);
+        dp_ = Coord2<T>(0.0, 0.0);
         mag_ = 0.0;
         ang_ = 0.0;
       }
 
   template <typename T>
     CrossSection<T>::CrossSection(const T & zs, const T & zb, const T & H, const T & Q, const T & n, 
-                                  const T & lx, const T & ly, const T &rx, const T & ry)
+                                  const Coord2<T> & lp, const Coord2<T> &rp, const Coord2<T> & dp)
       {
         zs_ = zs;
         zb_ = zb;
@@ -119,10 +94,9 @@ namespace Whuodhs
         Q_ = Q;
         n_ = n;
 
-        lx_ = lx;
-        ly_ = ly;
-        rx_ = rx;
-        ry_ = ry;
+        lp_ = lp;
+        rp_ = rp;
+        dp_ = dp;
 
         h_ = zs_ - zb_;
       }

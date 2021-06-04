@@ -13,9 +13,17 @@ namespace Whuodhs
     class TrapezoidCrossSection : public CrossSection<T>
     {
   public:
-    TrapezoidCrossSection(const T &zs, const T & zb, const T & H,
-                          const T & Q, const T & n, const T &b, const T & m,
-                          const T & lx, const T & ly, const T & rx, const T & ry);
+    TrapezoidCrossSection(const TrapezoidCrossSection<T> &tcs,
+                          const T &delta_x = 0.0,
+                          const T &delta_y = 0.0,
+                          const T &delta_zb = 0.0,
+                          const T &delta_zs = 0.0,
+                          const T &delta_b = 0.0,
+                          const T &delta_m = 0.0,
+                          const T &delta_a = 0.0);
+        TrapezoidCrossSection(const T &zs, const T &zb, const T &H,
+                              const T &Q, const T &n, const T &b, const T &m,
+                              const T &lx, const T &ly, const T &rx, const T &ry);
     ~TrapezoidCrossSection() {};
     virtual void print() const override final;
     virtual void update(const T & zs, const T & Q) override final;
@@ -65,6 +73,46 @@ namespace Whuodhs
       {
         return (this->A_ * std::pow(this->R_, (2.0/3.0)) / this->n_);
       }
+
+  template <typename T>
+    TrapezoidCrossSection<T>::TrapezoidCrossSection(const TrapezoidCrossSection<T> & tcs,
+                                                    const T & delta_x,
+                                                    const T & delta_y,
+                                                    const T & delta_zb,
+                                                    const T & delta_zs,
+                                                    const T & delta_b,
+                                                    const T & delta_m,
+                                                    const T & delta_a)
+      {
+        this->zb_ = tcs.zb_ + delta_zb;
+        this->zs_ = tcs.zs_ + delta_zs;
+        this->rx_ = tcs.lx_ + this->mag_ * std::cos(this->ang_);
+        this->ry_ = tcs.ly_ + this->mag_ * std::sin(this->ang_);
+        this->dx_ = 0.5 * (this->lx_ + this->rx_);
+        this->dy_ = 0.5 * (this->ly_ + this->ry_);
+        this->h_ = this->zs_ - this->zb_;
+        this->b_ = tcs.b_ + delta_b;
+        this->m_ = tcs.m_ + delta_m;
+        this->H_ = tcs.H_;
+        this->Q_ = tcs.Q_;
+        this->n_ = tcs.n_;
+        this->lx_ = tcs.lx_ + delta_x;
+        this->ly_ = tcs.ly_ + delta_y;
+        this->mag_ = this->b_ + 2.0 * this->H_ *  this->m_ ;
+        this->ang_ = tcs.ang_ + delta_a;
+        this->rx_ = tcs.lx_ + this->mag_ * std::cos(this->ang_);
+        this->ry_ = tcs.ly_ + this->mag_ * std::sin(this->ang_);
+        this->dx_ = 0.5 * (this->lx_ + this->rx_);
+        this->dy_ = 0.5 * (this->ly_ + this->ry_);
+        this->A_ = area();
+        this->B_ = width();
+        this->P_ = wetPerimeter();
+        this->R_ = hydraulicRadius();
+        this->K_ = flowModulus();
+        this->v_ = this->Q_ / this->A_;
+      }
+
+
 
   template <typename T>
     TrapezoidCrossSection<T>::TrapezoidCrossSection(const T &zs, const T & zb, const T & H,

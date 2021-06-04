@@ -17,7 +17,9 @@ int main()
       //rcs[i].update(10.0 * i, 100.0);
       //rcs[i].print();
     //}
-  RectangleCrossSection<double> rcs3 = RectangleCrossSection<double>(rcs[0], 100, 100, 50);
+  rcs[0].print();
+
+  RectangleCrossSection<double> rcs3 = RectangleCrossSection<double>(rcs[0], 100, 100, -1.0);
   rcs3.print();
 
     TrapezoidCrossSection<double> tcs[3] = 
@@ -32,6 +34,10 @@ int main()
       tcs[i].update(10.0 * i, 100.0);
       //tcs[i].print();
     }
+    tcs[0].print();
+
+    TrapezoidCrossSection<double> tcs3 = TrapezoidCrossSection<double>(tcs[0], 100, 100, -1.0);
+    tcs3.print();
 
 
     CompoundCrossSection<double> ccs[3] = 

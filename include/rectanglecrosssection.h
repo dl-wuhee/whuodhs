@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <cmath>
+#include "coordinate.h"
 #include "crosssection.h"
 
 namespace Whuodhs
@@ -76,10 +77,11 @@ namespace Whuodhs
       {
         this->zb_ = rcs.zb_ + delta_zb;
         this->zs_ = rcs.zs_ + delta_zs;
+        this->h_ = this->zs_ - this->zb_;
         this->b_ = rcs.b_ + delta_b;
+        this->H_ = rcs.H_;
         this->Q_ = rcs.Q_;
-        this->mag_ = rcs.mag_;
-        this->ang_ = rcs.ang_;
+        this->n_ = rcs.n_;
         this->lx_ = rcs.lx_ + delta_x;
         this->ly_ = rcs.ly_ + delta_y;
         this->mag_ = rcs.mag_ + delta_b;
